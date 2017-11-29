@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mdspan", "mdspan\mdspan.vcxproj", "{83DC5FDC-E3D9-42D6-B4E9-21A3B1B27997}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mdspan-test", "mdspan-test\mdspan-test.vcxproj", "{CC419908-D186-4988-92EB-B3355CB44F17}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83DC5FDC-E3D9-42D6-B4E9-21A3B1B27997}.Debug|x64.ActiveCfg = Debug|x64
+		{83DC5FDC-E3D9-42D6-B4E9-21A3B1B27997}.Debug|x64.Build.0 = Debug|x64
+		{83DC5FDC-E3D9-42D6-B4E9-21A3B1B27997}.Release|x64.ActiveCfg = Release|x64
+		{83DC5FDC-E3D9-42D6-B4E9-21A3B1B27997}.Release|x64.Build.0 = Release|x64
+		{CC419908-D186-4988-92EB-B3355CB44F17}.Debug|x64.ActiveCfg = Debug|x64
+		{CC419908-D186-4988-92EB-B3355CB44F17}.Debug|x64.Build.0 = Debug|x64
+		{CC419908-D186-4988-92EB-B3355CB44F17}.Release|x64.ActiveCfg = Release|x64
+		{CC419908-D186-4988-92EB-B3355CB44F17}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
