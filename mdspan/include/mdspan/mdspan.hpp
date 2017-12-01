@@ -41,6 +41,8 @@ namespace md {
 	constexpr ptrdiff_t dynamic_extent = gsl::dynamic_extent;
 
 	namespace {
+#pragma warning(push)
+#pragma warning(disable: 6326) // warning C6326: Potential comparison of a constant with another constant.
 		template<ptrdiff_t... Ns>
 		constexpr size_t count_dynamics() {
 			size_t count = 0;
@@ -48,6 +50,7 @@ namespace md {
 			static_cast<void>(swallow{ (count += (Ns == dynamic_extent))... });
 			return count;
 		}
+#pragma warning(pop)
 
 		template<template<typename...> typename Pred, typename... Types>
 		constexpr std::size_t find_first_type_of() {
