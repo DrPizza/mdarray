@@ -1,11 +1,15 @@
 #pragma once
 
 #if !defined(_STL_EXTRA_DISABLED_WARNINGS)
-#define _STL_EXTRA_DISABLED_WARNINGS 4061 4623 4365 4571 4625 4626 4710 4820 4987 5026 5027
+#define _STL_EXTRA_DISABLED_WARNINGS 4061 4324 4365 4514 4571 4582 4583 4623 4625 4626 4710 4774 4820 4987 5026 5027 5039
 #endif
 
 #if !defined(_SCL_SECURE_NO_WARNINGS)
 #define _SCL_SECURE_NO_WARNINGS 1
+#endif
+
+#if !defined(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING 1
 #endif
 
 #include <utility>
@@ -17,6 +21,7 @@
 #include <tuple>
 
 #pragma warning(disable: 4324) // warning C4234: structure was padded due to alignment specifier
+#pragma warning(disable: 4514) // warning C4514: '%s': unreferenced inline function has been removed
 #pragma warning(disable: 4625) // warning C4625: '%s': copy constructor was implicitly defined as deleted
 #pragma warning(disable: 4626) // warning C4626: '%s': assignment operator was implicitly defined as deleted
 #pragma warning(disable: 4710) // warning C4710: '%s': function not inlined
