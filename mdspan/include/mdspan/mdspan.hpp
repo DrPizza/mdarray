@@ -1,56 +1,58 @@
 #pragma once
 
 #if !defined(_STL_EXTRA_DISABLED_WARNINGS)
-#define _STL_EXTRA_DISABLED_WARNINGS 4061 4324 4365 4514 4571 4582 4583 4623 4625 4626 4710 4774 4820 4987 5026 5027 5039
+#	define _STL_EXTRA_DISABLED_WARNINGS 4061 4324 4365 4514 4571 4582 4583 4623 4625 4626 4710 4774 4820 4987 5026 5027 5039
 #endif
 
 #if !defined(_SCL_SECURE_NO_WARNINGS)
-#define _SCL_SECURE_NO_WARNINGS 1
+#	define _SCL_SECURE_NO_WARNINGS 1
 #endif
 
 #if !defined(_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
-#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING 1
+#	define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING 1
 #endif
 
-#include <utility>
-#include <array>
 #include <algorithm>
-#include <numeric>
+#include <array>
 #include <functional>
-#include <type_traits>
+#include <numeric>
 #include <tuple>
+#include <type_traits>
+#include <utility>
 
-#pragma warning(disable: 4324) // warning C4234: structure was padded due to alignment specifier
-#pragma warning(disable: 4514) // warning C4514: '%s': unreferenced inline function has been removed
-#pragma warning(disable: 4625) // warning C4625: '%s': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // warning C4626: '%s': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 4710) // warning C4710: '%s': function not inlined
-#pragma warning(disable: 4820) // warning C4820: '%s': '%d' bytes padding added after data member '%s'
-#pragma warning(disable: 5026) // warning C5026: '%s': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) // warning C5027: '%s': move assignment operator was implicitly defined as deleted
+#pragma warning(disable : 4324) // warning C4234: structure was padded due to alignment specifier
+#pragma warning(disable : 4514) // warning C4514: '%s': unreferenced inline function has been removed
+#pragma warning(disable : 4625) // warning C4625: '%s': copy constructor was implicitly defined as deleted
+#pragma warning(disable : 4626) // warning C4626: '%s': assignment operator was implicitly defined as deleted
+#pragma warning(disable : 4710) // warning C4710: '%s': function not inlined
+#pragma warning(disable : 4820) // warning C4820: '%s': '%d' bytes padding added after data member '%s'
+#pragma warning(disable : 5026) // warning C5026: '%s': move constructor was implicitly defined as deleted
+#pragma warning(disable : 5027) // warning C5027: '%s': move assignment operator was implicitly defined as deleted
 
-#pragma warning(disable: 26412) // warning C26412: Do not dereference an invalid pointer (lifetimes rule 1). 'return of %s' was invalidated at line %d by 'no initialization'.
-#pragma warning(disable: 26481) // warning C26481: Don't use pointer arithmetic. Use span instead. (bounds.1: http://go.microsoft.com/fwlink/p/?LinkID=620413)
-#pragma warning(disable: 26485) // warning C26485: Expression '%s::`vbtable'': No array to pointer decay. (bounds.3: http://go.microsoft.com/fwlink/p/?LinkID=620415)
-#pragma warning(disable: 26490) // warning C26490: Don't use reinterpret_cast. (type.1: http://go.microsoft.com/fwlink/p/?LinkID=620417)
-#pragma warning(disable: 26499) // warning C26499: Could not find any lifetime tracking information for '%s'
+#pragma warning(disable : 26412) // warning C26412: Do not dereference an invalid pointer (lifetimes rule 1). 'return of %s' was invalidated at line %d by 'no initialization'.
+#pragma warning(disable : 26481) // warning C26481: Don't use pointer arithmetic. Use span instead. (bounds.1: http://go.microsoft.com/fwlink/p/?LinkID=620413)
+#pragma warning(disable : 26485) // warning C26485: Expression '%s::`vbtable'': No array to pointer decay. (bounds.3: http://go.microsoft.com/fwlink/p/?LinkID=620415)
+#pragma warning(disable : 26490) // warning C26490: Don't use reinterpret_cast. (type.1: http://go.microsoft.com/fwlink/p/?LinkID=620417)
+#pragma warning(disable : 26499) // warning C26499: Could not find any lifetime tracking information for '%s'
 
 #include <gsl/gsl>
 
-#pragma pointers_to_members(full_generality, virtual_inheritance)  
+#pragma pointers_to_members(full_generality, virtual_inheritance)
 
-namespace md {
+namespace md
+{
 	template<typename T, ptrdiff_t E = gsl::dynamic_extent>
 	using span = gsl::span<T, E>;
 
 	constexpr ptrdiff_t dynamic_extent = gsl::dynamic_extent;
 
-	namespace {
+	namespace
+	{
 #pragma warning(push)
-#pragma warning(disable: 6326) // warning C6326: Potential comparison of a constant with another constant.
+#pragma warning(disable : 6326) // warning C6326: Potential comparison of a constant with another constant.
 		template<ptrdiff_t... Ns>
 		constexpr size_t count_dynamics() {
-			size_t count = 0;
+			size_t count  = 0;
 			using swallow = size_t[];
 			static_cast<void>(swallow{ (count += (Ns == dynamic_extent))... });
 			return count;
@@ -75,12 +77,14 @@ namespace md {
 		struct select_nth_type;
 
 		template<typename T, typename... Ts>
-		struct select_nth_type<0, T, Ts...> {
+		struct select_nth_type<0, T, Ts...>
+		{
 			using type = T;
 		};
 
 		template<std::size_t I, typename T, typename... Ts>
-		struct select_nth_type<I, T, Ts...> : select_nth_type<I - 1, Ts...> {
+		struct select_nth_type<I, T, Ts...> : select_nth_type<I - 1, Ts...>
+		{
 			static_assert(I <= sizeof...(Ts), "bad index");
 		};
 
@@ -88,7 +92,8 @@ namespace md {
 		using select_nth_t = typename select_nth_type<I, Ts...>::type;
 
 		template<template<typename...> typename Predicate, typename... Ts>
-		struct first_matching_type {
+		struct first_matching_type
+		{
 			using type = select_nth_t<find_first_type_of_v<Predicate, Ts...>, Ts...>;
 		};
 
@@ -111,16 +116,17 @@ namespace md {
 	}
 
 	template<ptrdiff_t... Extents>
-	struct extents {
+	struct extents
+	{
 		using index_type = ptrdiff_t;
 		using array_type = index_type[];
-		using my_type = extents<Extents...>;
+		using my_type    = extents<Extents...>;
 
 		constexpr extents() noexcept : values{ Extents... } {
 		}
 		constexpr extents(const extents&) = default;
-		constexpr extents(extents&&) = default;
-		~extents() = default;
+		constexpr extents(extents&&)      = default;
+		~extents()                        = default;
 		extents& operator=(const extents&) noexcept = default;
 		extents& operator=(extents&&) noexcept = default;
 
@@ -162,43 +168,47 @@ namespace md {
 			}
 		}
 		template<typename... IndexType>
-		constexpr extents(IndexType... DynamicExtents) noexcept : extents(std::array<index_type, sizeof...(IndexType)> { DynamicExtents... }) {
+		constexpr extents(IndexType... DynamicExtents) noexcept :
+		extents(std::array<index_type, sizeof...(IndexType)>{ DynamicExtents... }) {
 		}
 
 	private:
-		std::array<index_type, my_type::rank()> values;
+		std::array<index_type, sizeof...(Extents)> values;
 	};
 
 	template<typename E, typename = void>
-	struct is_extent : std::false_type {
+	struct is_extent : std::false_type
+	{
 	};
 
 	template<typename E>
-	struct is_extent<E, std::void_t<
-		typename E::index_type,
-		decltype(E::rank()),
-		decltype(E::rank_dynamic()),
-		decltype(E::static_extent(std::declval<size_t>())),
-		decltype(std::declval<E>().extent(std::declval<size_t>())),
-		decltype(std::declval<E>().size())
-	> > : std::true_type {
+	struct is_extent<E,
+	                 std::void_t<typename E::index_type,
+	                             decltype(E::rank()),
+	                             decltype(E::rank_dynamic()),
+	                             decltype(E::static_extent(std::declval<size_t>())),
+	                             decltype(std::declval<E>().extent(std::declval<size_t>())),
+	                             decltype(std::declval<E>().size())>> : std::true_type
+	{
 	};
 
 	template<typename E>
 	constexpr bool is_extent_v = is_extent<E>::value;
 
-	namespace {
+	namespace
+	{
 		template<typename Dimensions>
-		struct mapping_base {
+		struct mapping_base
+		{
 			using index_type = ptrdiff_t;
 			using array_type = index_type[];
 
 			using extent_type = Dimensions;
 
-			constexpr mapping_base() noexcept = default;
+			constexpr mapping_base() noexcept                    = default;
 			constexpr mapping_base(const mapping_base&) noexcept = default;
-			constexpr mapping_base(mapping_base&&) noexcept = default;
-			~mapping_base() noexcept = default;
+			constexpr mapping_base(mapping_base&&) noexcept      = default;
+			~mapping_base() noexcept                             = default;
 			mapping_base& operator=(const mapping_base&) noexcept = default;
 			mapping_base& operator=(mapping_base&&) noexcept = default;
 
@@ -207,7 +217,8 @@ namespace md {
 			}
 
 			template<typename... IndexType>
-			constexpr mapping_base(IndexType... DynamicExtents) noexcept : mapping_base(std::array<index_type, sizeof...(DynamicExtents)>{ DynamicExtents... }) {
+			constexpr mapping_base(IndexType... DynamicExtents) noexcept :
+			mapping_base(std::array<index_type, sizeof...(DynamicExtents)>{ DynamicExtents... }) {
 			}
 
 			static constexpr size_t rank() noexcept {
@@ -229,9 +240,9 @@ namespace md {
 				return dimensions.size();
 			}
 
-			static constexpr bool is_always_unique = true;
+			static constexpr bool is_always_unique     = true;
 			static constexpr bool is_always_contiguous = true;
-			static constexpr bool is_always_strided = true;
+			static constexpr bool is_always_strided    = true;
 
 			constexpr bool is_unique() const noexcept {
 				return true;
@@ -255,12 +266,12 @@ namespace md {
 			template<typename IndexType, size_t N>
 			constexpr index_type operator()(const std::array<IndexType, N>& idxes) const noexcept {
 				static_assert(N == rank(), "wrong number of indices passed");
-				return inner_product(strides.begin(), strides.end(), idxes.begin(), static_cast<index_type>(0), std::plus<index_type>(), std::multiplies<index_type>());
+				return inner_product(strides.begin(), strides.end(), idxes.begin(), gsl::narrow<index_type>(0), std::plus<index_type>(), std::multiplies<index_type>());
 			}
 
-			template<typename... IndexType >
+			template<typename... IndexType>
 			constexpr index_type operator()(IndexType... indices) const noexcept {
-				return operator()(std::array<index_type, sizeof...(IndexType)>{ static_cast<index_type>(indices)... });
+				return operator()(std::array<index_type, sizeof...(IndexType)>{ gsl::narrow<index_type>(indices)... });
 			}
 
 		protected:
@@ -269,17 +280,20 @@ namespace md {
 		};
 	}
 
-	struct layout_right {
+	struct layout_right
+	{
 		template<typename Dimensions>
-		struct mapping : mapping_base<Dimensions> {
+		struct mapping : mapping_base<Dimensions>
+		{
 			using base_type = mapping_base<Dimensions>;
 
 			using index_type = typename base_type::index_type;
 
-			constexpr mapping() noexcept = default;
+			constexpr mapping() noexcept : mapping(std::array<index_type, 0>{}) {
+			}
 			constexpr mapping(const mapping&) noexcept = default;
-			constexpr mapping(mapping&&) noexcept = default;
-			~mapping() noexcept = default;
+			constexpr mapping(mapping&&) noexcept      = default;
+			~mapping() noexcept                        = default;
 			mapping& operator=(const mapping&) noexcept = default;
 			mapping& operator=(mapping&&) noexcept = default;
 
@@ -287,7 +301,7 @@ namespace md {
 			constexpr mapping(const std::array<IndexType, N>& dynamic_extents) noexcept : base_type(dynamic_extents) {
 				size_t stride = 1;
 				for(size_t i = 0; i < base_type::rank(); ++i) {
-					size_t j = base_type::rank() - 1 - i;
+					size_t j         = base_type::rank() - 1 - i;
 					this->strides[j] = stride;
 					stride *= this->dimensions.extent(j);
 				}
@@ -299,17 +313,20 @@ namespace md {
 		};
 	};
 
-	struct layout_left {
+	struct layout_left
+	{
 		template<typename Dimensions>
-		struct mapping {
+		struct mapping
+		{
 			using base_type = mapping_base<Dimensions>;
 
 			using index_type = typename base_type::index_type;
 
-			constexpr mapping() noexcept = default;
+			constexpr mapping() noexcept : mapping(std::array<index_type, 0>{}) {
+			}
 			constexpr mapping(const mapping&) noexcept = default;
-			constexpr mapping(mapping&&) noexcept = default;
-			~mapping() noexcept = default;
+			constexpr mapping(mapping&&) noexcept      = default;
+			~mapping() noexcept                        = default;
 			mapping& operator=(const mapping&) noexcept = default;
 			mapping& operator=(mapping&&) noexcept = default;
 
@@ -329,55 +346,57 @@ namespace md {
 	};
 
 	template<size_t... Strides>
-	struct layout_strided {
+	struct layout_strided
+	{
 		template<typename Dimensions>
-		struct mapping {
+		struct mapping
+		{
 			// TODO this is rather ill-defined. For padded mdarrays the stride should be *bytes*, not *elements*
 			// but the other layouts operate in *elements* not *bytes*.
 		};
 	};
 
 	template<typename M, typename = void>
-	struct is_mapping : std::false_type {
+	struct is_mapping : std::false_type
+	{
 	};
 
 	template<typename M>
-	struct is_mapping<M, std::void_t<
-		typename M::index_type,
-		decltype(M::rank()),
-		decltype(M::rank_dynamic()),
-		decltype(M::static_extent(std::declval<size_t>())),
-		decltype(std::declval<M>().extent(std::declval<size_t>())),
-		decltype(std::declval<M>().span_size()),
-		decltype(std::declval<M>().stride(std::declval<size_t>())),
-		decltype(M::is_always_unique),
-		decltype(M::is_always_contiguous),
-		decltype(M::is_always_strided),
-		decltype(std::declval<M>().is_unique()),
-		decltype(std::declval<M>().is_contiguous()),
-		decltype(std::declval<M>().is_strided())
-	> > : std::true_type {
+	struct is_mapping<M,
+	                  std::void_t<typename M::index_type,
+	                              decltype(M::rank()),
+	                              decltype(M::rank_dynamic()),
+	                              decltype(M::static_extent(std::declval<size_t>())),
+	                              decltype(std::declval<M>().extent(std::declval<size_t>())),
+	                              decltype(std::declval<M>().span_size()),
+	                              decltype(std::declval<M>().stride(std::declval<size_t>())),
+	                              decltype(M::is_always_unique),
+	                              decltype(M::is_always_contiguous),
+	                              decltype(M::is_always_strided),
+	                              decltype(std::declval<M>().is_unique()),
+	                              decltype(std::declval<M>().is_contiguous()),
+	                              decltype(std::declval<M>().is_strided())>> : std::true_type
+	{
 	};
 
 	template<typename M>
 	constexpr bool is_mapping_v = is_mapping<M>::value;
 
 	template<typename L, typename = void>
-	struct is_layout : std::false_type {
-	};
+	struct is_layout : std::false_type
+	{};
 
 	template<typename L>
-	struct is_layout<L, std::void_t<
-		typename L::template mapping<extents<1>>
-	> > : std::true_type {
-	};
+	struct is_layout<L, std::void_t<typename L::template mapping<extents<1>>>> : std::true_type
+	{};
 
 	template<typename L>
 	constexpr bool is_layout_v = is_layout<L>::value;
 
 	//template<typename T, typename Dimensions, typename Layout = layout_right>
 	template<typename T, typename... Properties>
-	struct mdspan {
+	struct mdspan
+	{
 		using extents_type = first_matching_type_t<is_extent, Properties...>;
 		using layout_type  = first_matching_type_t<is_layout, Properties..., layout_right>;
 
@@ -398,14 +417,14 @@ namespace md {
 		using pointer         = element_type*;
 		using reference       = element_type&;
 
-		constexpr mdspan() noexcept = default;
-		constexpr mdspan(mdspan&&) noexcept = default;
+		constexpr mdspan() noexcept              = default;
+		constexpr mdspan(mdspan&&) noexcept      = default;
 		constexpr mdspan(mdspan const&) noexcept = default;
-		~mdspan() noexcept = default;
+		~mdspan() noexcept                       = default;
 		mdspan& operator=(mdspan&&) noexcept = default;
 		mdspan& operator=(mdspan const&) noexcept = default;
 
-		template <typename R, typename... RProperties>
+		template<typename R, typename... RProperties>
 		friend struct mdspan;
 
 		static constexpr size_t rank() noexcept {
@@ -424,27 +443,22 @@ namespace md {
 		static constexpr bool are_extents_compatible() {
 			using other_type = mdspan<R, RProperties...>;
 			for(size_t i = 0; i < my_type::rank(); ++i) {
-				if(my_type::static_extent(i) != other_type::static_extent(i)
-				&& my_type::static_extent(i) != md::dynamic_extent) {
+				if(my_type::static_extent(i) != other_type::static_extent(i) && my_type::static_extent(i) != md::dynamic_extent) {
 					return false;
 				}
 			}
 			return true;
 		}
 
-		template<typename R, typename... RProperties, typename = std::enable_if_t<
-			std::is_convertible_v<typename mdspan<R, RProperties...>::pointer, my_type::pointer>
-			&& my_type::rank() == mdspan<R, RProperties...>::rank()
-			&& are_extents_compatible<R, RProperties...>()
-		>>
+		template<typename R, typename... RProperties, typename = std::enable_if_t<std::is_convertible_v<typename mdspan<R, RProperties...>::pointer, my_type::pointer>
+		                                                                       && my_type::rank() == mdspan<R, RProperties...>::rank()
+		                                                                       && are_extents_compatible<R, RProperties...>()>>
 		constexpr mdspan(const mdspan<R, RProperties...>& rhs) noexcept : elements(rhs.elements) {
 		}
 
-		template<typename R, typename... RProperties, typename = std::enable_if_t<
-			std::is_convertible_v<typename mdspan<R, RProperties...>::pointer, my_type::pointer>
-			&& my_type::rank() == mdspan<R, RProperties...>::rank()
-			&& are_extents_compatible<R, RProperties...>()
-		>>
+		template<typename R, typename... RProperties, typename = std::enable_if_t<std::is_convertible_v<typename mdspan<R, RProperties...>::pointer, my_type::pointer>
+		                                                                       && my_type::rank() == mdspan<R, RProperties...>::rank()
+		                                                                       && are_extents_compatible<R, RProperties...>()>>
 		mdspan& operator=(const mdspan<R, RProperties...>& rhs) noexcept {
 			if(*this != rhs) {
 				elements = rhs.elements;
@@ -482,7 +496,7 @@ namespace md {
 
 		template<typename... IndexType>
 		constexpr reference operator()(IndexType... indices) const noexcept {
-			return this->operator()(std::array<index_type, sizeof...(IndexType)> { static_cast<index_type>(indices)... });
+			return this->operator()(std::array<index_type, sizeof...(IndexType)>{ gsl::narrow<index_type>(indices)... });
 		}
 
 		template<typename IndexType, size_t N>
@@ -504,7 +518,7 @@ namespace md {
 
 		template<typename... IndexType>
 		static constexpr size_t required_span_size(IndexType... DynamicExtents) {
-			return required_span_size(std::array<index_type, sizeof...(IndexType)>{ DynamicExtents...});
+			return required_span_size(std::array<index_type, sizeof...(IndexType)>{ DynamicExtents... });
 		}
 
 		template<typename IndexType, size_t N>
@@ -512,9 +526,9 @@ namespace md {
 			return mapping_type(dynamic_extents).span_size();
 		}
 
-		static constexpr bool is_always_unique = mapping_type::is_always_unique;
+		static constexpr bool is_always_unique     = mapping_type::is_always_unique;
 		static constexpr bool is_always_contiguous = mapping_type::is_always_contiguous;
-		static constexpr bool is_always_strided = mapping_type::is_always_strided;
+		static constexpr bool is_always_strided    = mapping_type::is_always_strided;
 
 		constexpr bool is_unique() const {
 			return mapping.is_unique();
@@ -530,42 +544,50 @@ namespace md {
 			return mapping.stride(r);
 		}
 
-	private:
+	//private:
 		pointer elements;
 		mapping_type mapping;
 	};
 
-	struct all_type_t {
+	struct all_type_t
+	{
 	};
 
 	constexpr all_type_t all = all_type_t{};
 
 	template<typename S, typename = void>
-	struct is_slice : std::false_type {
+	struct is_slice : std::false_type
+	{
 	};
 
 	template<typename T>
-	struct is_slice<std::initializer_list<T>, std::enable_if_t<std::is_integral_v<T> > > : std::true_type {
+	struct is_slice<std::initializer_list<T>, std::enable_if_t<std::is_integral_v<T>>> : std::true_type
+	{
 	};
 
 	template<typename T>
-	struct is_slice<std::pair<T, T>, std::enable_if_t<std::is_integral_v<T> > > : std::true_type {
+	struct is_slice<std::pair<T, T>, std::enable_if_t<std::is_integral_v<T>>> : std::true_type
+	{
 	};
 
 	template<typename T>
-	struct is_slice<std::tuple<T, T>, std::enable_if_t<std::is_integral_v<T> > > : std::true_type {
+	struct is_slice<std::tuple<T, T>, std::enable_if_t<std::is_integral_v<T>>> : std::true_type
+	{
 	};
 
 	template<typename T>
-	struct is_slice<std::array<T, 2>, std::enable_if_t<std::is_integral_v<T> > > : std::true_type {
+	struct is_slice<std::array<T, 2>, std::enable_if_t<std::is_integral_v<T>>> : std::true_type
+	{
 	};
 
 	template<typename T>
-	struct is_slice<T, std::enable_if_t<std::is_integral_v<T> > > : std::true_type {
+	struct is_slice<T, std::enable_if_t<std::is_integral_v<T>>> : std::true_type
+	{
 	};
 
 	template<>
-	struct is_slice<all_type_t> : std::true_type {
+	struct is_slice<all_type_t> : std::true_type
+	{
 	};
 
 	template<typename T>
